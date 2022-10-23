@@ -1,0 +1,150 @@
+<!DOCTYPE html>   
+<html>   
+<head> </head>
+<meta name= "viewport" content="width=device-width, initial-scale=1">  
+<title> Login Portal </title> 
+
+<style>
+body {
+  background-image: url('https://wallpaperaccess.com/full/1912160.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-size: 150%;
+}
+</style>
+
+<style>   
+
+Body {  
+  font-family: Calibri, Helvetica, sans-serif;  
+  background-color: grey;  
+}  
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 24px 16px;
+  text-decoration: none;
+}
+
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 18px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: 18px;
+  top: 400px;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+button {   
+       background-color: #800080;   
+       width: auto;  
+        color: white;   
+        padding: 10px 18px;   
+        margin: 10px 5px;   
+        border: none;   
+        cursor: pointer;   
+         }   
+ form {   
+        border: 10px solid #f1f1f1;   
+    }   
+ input[type=text], input[type=password] {   
+        width: 100%;   
+        margin: 10px 0;  
+        padding: 10px 20px;   
+        display: inline-block;   
+        border: 3px solid green;   
+        box-sizing: border-box;   
+    }  
+ button:hover {   
+        opacity: 0.7;   
+    }   
+        
+ .container {   
+        padding: 25px;   
+        background-color: none;  
+
+    }
+  
+</style>   
+  </head>    
+   <body>    
+   <center><h1> SOEN 287 Login Portal </h1></center>     
+    <form>  
+        <div class= "container">   
+            <label> Username: </label>   
+            <input type= "text" placeholder= "Enter Username" name= "username" required>  
+            <label> Password: </label>   
+            <input type= "password" placeholder= "Enter Password" name= "password" required>  
+            <button type= "submit"> Login </button>   
+            <input type= "checkbox" checked="checked"> Remember me </input>
+            <button onclick= "document.location = url('')" > Sign Up </button>
+            <a href="#"> Forgot Password? </a>   
+        </div>   
+        <div class="navbar">
+
+  <div class="dropdown">
+    <button class="dropbtn"> User Type
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="#"> Student </a>
+      <a href="#"> Teacher </a>
+    </div>
+  </div>
+</div>
+            
+        </div>   
+    </form>     
+  </body>     
+</html>  
+
+// 
