@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="Styling.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="teacherAssessment">
+      <!--
+        <style>
+        table,
+        th,
+        td {
+          border-collapse: collapse;
+          padding-top: 10px;
+          padding-bottom: 20px;
+          padding-left: 50px;
+          padding-right: 50px;
+        }
+      </style>
+    -->
+      <table id="teacherAssignment">
+        <tr>
+          <th colspan="3">Assignments list</th>
+        </tr>
+        <tr>
+          <th>Students</th>
+          <th>Grade</th>
+          <th>Weight</th>
+        </tr>
+        <tr>
+          <th>
+            <div class="student_droplist" style="width: 100px">
+              <select name="students" id="students"></select>
+            </div>
+          </th>
+          <th></th>
+          <th>
+            <button type="button" onclick="addRow()">Edit Assignments</button>
+          </th>
+        </tr>
+        <tr>
+          <th>Project</th>
+          <th>grade pulled form record</th>
+          <th>20%</th>
+        </tr>
+        <tr>
+          <th>Midterm</th>
+          <th>grade pulled form record</th>
+          <th>35%</th>
+        </tr>
+        <tr>
+          <th>Final</th>
+          <th>grade pulled form record</th>
+          <th>45%</th>
+        </tr>
+      </table>
+      <br />
+
+      <script>
+        function addRow() {
+          var table = document.getElementById("teacherAssignment");
+          var row = table.insertRow(-1);
+          var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          var cell3 = row.insertCell(2);
+          cell1.innerHTML = "Assignment";
+          cell2.innerHTML = "grade pulled from record";
+          cell3.innerHTML = "- %";
+        }
+      </script>
+    </div>
+  </body>
+</html>
