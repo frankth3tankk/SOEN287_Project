@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+  }
+
+
+/* Top navigation Bar */
+.topnav {
+  background-color: #111;
+  overflow: hidden;
+  }
+.topnav button {
+    float: left;
+    text-align: center;
+    padding: 16px 18px;
+}
+.topnav a {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 16px 18px;
+  text-decoration: none;
+  font-size: 17px;
+}
+.topnav a:hover {
+  background-color: #444;
+    color: white;
+  }
+.topnav a.active {
+  background-color: #444;
+    color: white;
+}
+.topnav #profile {
+  float:right;
+  padding: 2px 4px 0px 0px;
+}
+
+
+/* Collapsible Side navigation bar */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 50px;
+  }
+  .sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+  .openbtn {
+    float:left;
+    font-size: 15px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 20px 15px;
+    border: none;
+
+  }
+  .openbtn:hover {
+    background-color: #444;
+  }
+  #main{
+    transition: margin-left .5s;
+  }
+
+
+/* Two main columns with 1:3 size ratio */
+.column {
+    float: left;
+    padding: 10px;
+  }
+  .column.left {
+    width: 75%;
+  }
+  .column.right {
+    width: 25%;
+  }
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  /* Responsive layout in smaller screens */
+  @media screen and (max-width: 600px) {
+    .column.left, .column.right {
+      width: 100%;
+    }
+  }
+
+
+/* Announcements Flex Box */
+.announcements {
+    display: flex;
+    background-color: rgb(255, 208, 0);
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.announcements div {
+    background-color: rgb(250, 234, 131);
+    margin: 10px;
+    width: 95%;
+}
+.announcements div p {
+    text-align: left;
+    padding-left: 4%;
+}
+
+
+/* Footer */
+.footer {
+  background-color: #111;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+
