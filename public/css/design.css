@@ -1,0 +1,314 @@
+
+ body { 
+  background-image: url('https://wallpaperaccess.com/full/1912160.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-size: 150%;
+}
+
+Body {  
+  font-family: Calibri, Helvetica, sans-serif;  
+  background-color: grey;  
+}  
+
+.navbar {
+  overflow: hidden;
+  background-color: rgba(132, 0, 255, 0.322);
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 24px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+
+}
+
+.dropdown .dropbtn {
+  font-size: 18px;  
+  border: none;
+  outline: none;
+  color:white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: rgba(255, 217, 0, 0.795);
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: 18px;
+  top: 400px;
+  background-color: rgba(132, 0, 255, 0.322);
+  min-width: 0px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  font-size: 18px
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+button {   
+       background-color: #800080;   
+       width: auto;  
+        color: white;   
+        padding: 10px 18px;   
+        margin: 10px 5px;   
+        border: none;   
+        cursor: pointer;   
+         }   
+ form {   
+        border: 4px solid #f1f1f1;   
+    }   
+ input[type=username], input[type=password] {   
+        width: 100%;   
+        margin: 10px 0px;  
+        padding: 10px 10px;   
+        display: inline-block;   
+        border: 3px solid green;   
+        box-sizing: border-box;   
+    }  
+ button:hover {   
+        opacity: 1;   
+    }   
+        
+ .container0 {   
+        padding: 30px;   
+        background-color: none;  
+
+    }
+  
+
+/* SIGN UP V1 CODE BEGINS FROM HERE */
+
+    body {
+      background-image: url('https://wallpaperaccess.com/full/1912160.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      background-size: 150%;
+    }
+    
+    body {font-family: Calibri, Helvetica, sans-serif;  
+      background-color: grey;  }
+    
+    /* Full-width input fields */
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      display: inline-block;
+      border: 1 px;
+      background: #ffffff;
+    }
+    
+    input[type=text]:focus, input[type=password]:focus {
+      background-color: rgb(134, 131, 131);
+      outline: none;
+    }
+    
+    hr {
+      border: 1px solid #ffffff;
+      margin-bottom: 25px;
+    
+    }
+    
+    /* Set a style for all buttons */
+    button {
+      background-color: #04AA6D;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      opacity: 0.9;
+    }
+    
+    button:hover {
+      opacity:1;
+    }
+    
+    /* Extra styles for the cancel button */
+    .cancelbtn1 {
+      padding: 14px 20px;
+      background-color: #f44336;
+    }
+    
+    /* Float cancel and signup buttons and add an equal width */
+    .cancelbtn1, .signupbtn1 {
+      float: left;
+      width: 50%;
+    }
+    
+    /* Add padding to container elements */
+    .container1 {
+      padding: 16px;
+    }
+    
+    /* Clear floats */
+    .clearfix1::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+    
+    /* Change styles for cancel button and signup button on extra small screens */
+    @media screen and (max-width: 300px) {
+      .cancelbtn1, .signupbtn1 {
+         width: 100%;
+      }
+    }
+
+
+/* SIGN UP V2 CODE BEGINS FROM HERE */
+
+    body {
+      background-image: url('https://wallpaperaccess.com/full/1912160.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      background-size: 150%;
+    }
+    
+  body {font-family: Arial, Helvetica, sans-serif;}
+    * {box-sizing: border-box;}
+    
+    /* Full-width input fields */
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      display: inline-block;
+      border: none;
+      background: #f1f1f1;
+    }
+    
+    /* Add a background color when the inputs get focus */
+    input[type=text]:focus, input[type=password]:focus {
+      background-color: #ddd;
+      outline: none;
+    }
+    
+    /* Set a style for all buttons */
+    button {
+      background-color: #04AA6D;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      opacity: 0.9;
+    }
+    
+    button:hover {
+      opacity:1;
+    }
+    
+    /* Extra styles for the cancel button */
+    .cancelbtn2 {
+      padding: 14px 20px;
+      background-color: #f44336;
+    }
+    
+    /* Float cancel and signup buttons and add an equal width */
+    .cancelbtn2, .signupbtn2 {
+      float: left;
+      width: 50%;
+    }
+    
+    /* Add padding to container elements */
+    .container2 {
+      padding: 16px;
+    }
+    
+    /* The Model (background) */
+    .model {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-image: url('https://wallpaperaccess.com/full/1912160.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      background-size: 150%;
+      padding-top: 50px;
+    }
+    
+    /* Model Content/Box */
+    .model-content {
+      background-color: #fefefe;
+      margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+      border: 1px solid #888;
+      width: 80%; /* Could be more or less, depending on screen size */
+    }
+    
+    /* Style the horizontal ruler */
+    hr {
+      border: 1px solid #f1f1f1;
+      margin-bottom: 25px;
+    }
+     
+    /* The Close Button (x) */
+    .close {
+      position: absolute;
+      right: 35px;
+      top: 15px;
+      font-size: 40px;
+      font-weight: bold;
+      color: #f1f1f1;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #f44336;
+      cursor: pointer;
+    }
+    
+    /* Clear floats */
+    .clearfix2::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+    
+    /* Change styles for cancel button and signup button on extra small screens */
+    @media screen and (max-width: 300px) {
+      .cancelbtn2, .signupbtn2 {
+         width: 100%;
+      }
+    } 
