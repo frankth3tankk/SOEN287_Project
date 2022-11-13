@@ -8,11 +8,18 @@ const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
+
 const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
 const assessmentsContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
 const professorContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const app = express();
+
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -27,6 +34,14 @@ app.use(passport.session());
 
 
 mongoose.connect("mongodb+srv://admin-parsa:Parsa1234@cluster0.v6lcnxb.mongodb.net/soen287proj", {useNewUrlParser: true});
+
+const msgSchema = new mongoose.Schema({
+  msg: {
+      type: String,
+      require: true
+  } });
+
+const Msg = mongoose.model('msg', msgSchema);
 
 /* --- Database Models --- */
 
@@ -117,12 +132,51 @@ app.get("/teacherAssessments", (req, res) => {
   }
 });
 
+
+
 app.get("/studentAssessments", (req, res) => {
+
+  function toLetterGrade(arr) {
+    var LetterGrade = '';
+    var result = [];
+    for (i = 0; i < arr.length; i++) {
+      LetterGrade = '';
+      if (arr[i] >= 85) {
+        LetterGrade = "A";
+      } else if (arr[i] >= 80) {
+        LetterGrade= "A-";
+      } else if (arr[i] >= 75) {
+        LetterGrade = "B+";
+      } else if (arr[i] >= 70) {
+        LetterGrade = "B";
+      } else if (arr[i] >= 65) {
+        LetterGrade = "B-";
+      } else if (arr[i] >= 60) {
+        LetterGrade= "C+";
+      } else if (arr[i] >= 55) {
+        LetterGrade = "C";
+      } else if (arr[i] >= 50) {
+        LetterGrade= "D";
+      } else {
+        LetterGrade = "F";
+      }
+      result.push(LetterGrade);
+    }
+    return result;
+  }
+
   Assessment.find({}, function(err, assessments){
+  var lettergrades = [];
+    assessments.forEach(function(assessment, index) {
+      lettergrades.push(toLetterGrade(assessment.grades))
+    })
+
   res.render("studentAssessments", {
-    assessments: assessments
+    assessments: assessments,
+    lettergrades: lettergrades
   });
 });
+
 });
 
 app.get("/submitAssessment", (req, res) => {
@@ -282,6 +336,22 @@ app.post("/login", function(req, res){
   });
 
 });
+
+io.on('connection', socket => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+      console.log('user disconnected');
+  });
+  socket.on('chat message', msg => {
+    console.log(msg);
+      const message = new Msg({msg : msg});
+      
+      message.save().then(() =>{
+        console.log('message saved')
+          io.emit('chat message', msg)
+      });
+  });
+}) ;
 
 
 app.listen(3000, function() {

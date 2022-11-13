@@ -197,12 +197,13 @@ text-align: center;
   padding: 20px 20px 20px 20px;
 }
 .message{
-  background-color:blue;
+  text-align: left;
+  background-color: grey;
   padding: 10px;
   color: white;
   width: fit-content;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: 0;
 }
 .user_message{
   margin-left: auto;
@@ -213,17 +214,17 @@ text-align: center;
 .mfooter{
       display: flex;
 }
-.messagebox input{
+#message{
   flex:0;
-  height: 70px;
-  width: 9cm;
+  height: 30px;
+  width: 200px;	
   border: double;
   outline:none;
   padding-left: 5px;
   font-size: 16px;
 }
-.messagebox button{
-  height: 50px;
+#send-button{
+  height: 30px;
   width: 100px;
   font-size: 18px;
   border: groove;
@@ -232,10 +233,11 @@ text-align: center;
   color: black;
   cursor: pointer;
 }
-.messagebox button:hover{
+#send-button:hover{
   background-color: grey;
   transition: 0.2s ease;
 }
+
 
 
 

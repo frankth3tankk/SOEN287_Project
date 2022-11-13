@@ -29,19 +29,40 @@
                 <h1> Chatbox </h1>
            </div> 
            <hr/>
-           <div class="mbody">
-            <p class="message"> Hello</p>
-            <p class="message user_message"> Hi </p>
-            </div>
+           <div class="mbody"> <p id="message-container" class="message"> </p> </div>
         <hr/>
         <div class="mfooter">
-            <form class="messagebox">
-                    <input type="text" name="">
-                    <button>SEND</button>
+            <form id="messagebox">
+                    <input type="text" id="message" name="msg">
+                    <input id="send-button" type="submit">
                 </form>
            </div>
         </div>
 
 </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+  var container = document.getElementById("message-container");
+  var form = document.getElementById('messagebox');
+  var input = document.getElementById('message');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (input.value) {
+        
+      const message = input.value
+      appendMessage(`You: ${message}`)
+      socket.emit('chat message', message);
+      input.value = '';
+    }
+  });
+  function appendMessage(message){
+    const messageElement = document.createElement('p')
+    messageElement.innerText = message
+    container.append(messageElement)
+  }
+  
+</script>
 
 <%- include('partials/footer'); -%>

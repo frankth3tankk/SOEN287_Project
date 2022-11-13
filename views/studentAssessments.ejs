@@ -1,78 +1,27 @@
 <%- include("partials/header"); -%>
 
-<% assessments.forEach(function(assessment) { %>
-  <%= assessment.grade[0] -%>
-  <%}) %>
-
-  
-
 <table class="AssignmentTable">
-<thead>
-<tr>
-  <td class="Headers" >Assignments</td>
-  <td class="Headers" >Marks</td>
-  <td class="Headers" >Letter Grade</td>
-  <td class="Headers" >Average</td>
-  <td class="Headers" >Median</td>
+  <thead>
+  <tr>
+    <td class="Headers" >Assignments</td>
+    <td class="Headers" >Marks</td>
+    <td class="Headers" >Letter Grade</td>
+    <td class="Headers" >Average</td>
+    <td class="Headers" >Median</td>   
+  </tr>
 </thead>
+<% assessments.forEach(function(assessment, index) { %>
+  <tr>
 
-<tbody>
-</tr>
-
-<tr>
-  <td class="Assignments">Assignment 1</td>
-  <td class="LetterMark">5%</td>
-  <td class="LetterGrade">A</td>
+  <td class="Assignments"><%= assessment.name -%></td>
+  <td class="LetterMark"><%= assessment.grades[0] -%></td>
+  <td class="LetterGrade"><%= lettergrades[0] -%></td>
   <td class="Average">10%</td>
   <td class="Median">9%</td>
 </tr>
-
-<tr>
-  <td class="Assignments">Assignment 2</td>
-  <td class="LetterMark">8%</td>
-  <td class="LetterGrade">B</td>
-  <td class="Average">70%</td>
-  <td class="Median">50%</td>
-
-</tr>
-
-<tr>
-  <td class="Assignments">Assignment 3</td>
-  <td class="LetterMark">11%</td>
-  <td class="LetterGrade">C</td>
-  <td class="Average"> 68% </td>
-  <td class="Median"> 60% </td>
-</tr>
-
-<tr>
-  <td class="Assignments">Assignment 4</td>
-  <td class="LetterMark">14%</td>
-  <td class="LetterGrade">E</td>
-  <td class="Average">73%</td>
-  <td class="Median">80%</td>
-</tr>
-
-<tr>
-  <td class="Assignments">Assignment 5</td>
-  <td class="LetterMark">17%</td>
-  <td class="LetterGrade">F</td>
-  <td class="Average">55%</td>
-  <td class="Median">52%</td>
-</tr>
-
-</tbody>
-<tfoot>
-
-<tr>
-  <td id = "Final">Final</td>
-  <td class="LetterMark">90%</td>
-  <td class="LetterGrade">A</td>
-  <td class="Average">63%</td>
-  <td class="Median">51%</td>
-</tr>
-
-</tfoot>
+<%}) %>
 </table>
+
 
 
 <%- include("partials/footer"); -%>
