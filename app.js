@@ -18,6 +18,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const { forEach } = require('lodash');
 const io = new Server(server);
 
 
@@ -52,7 +53,6 @@ const userSchema = new mongoose.Schema ({
   password: String,
   name: String,
   role: String,
-  grades: [Number]
 });
 userSchema.plugin(passportLocalMongoose);
 const User = new mongoose.model("User", userSchema);
@@ -63,49 +63,110 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-/* Post Model */
-const postSchema = {
+/* Post Schema */
+const postSchema = new mongoose.Schema ({
   title: String,
   content: String
-};
+});
 const Post = mongoose.model("Post", postSchema);
 
-/* Assessment Model */
-const assessmentSchema = {
+/* Assessment Schema */
+const assessmentSchema = new mongoose.Schema ({
   name: String,
   totalMarks: Number,
   weight: Number,
-  grades: [Number]
-};
+  average: Number
+});
 const Assessment = mongoose.model("Assessment", assessmentSchema);
 
-/* Question Schema 
-const questionSchema = {
-  id: Number,
-  mark: Number
+/* Student Schema */
+const studentSchema = new mongoose.Schema ({
+  name: String,
+  studentID: Number
+})
+const Student = mongoose.model("Student", studentSchema);
+
+/* Grade Schema */
+const gradeSchema = {
+  mark: Number,
+  student: {
+    type: mongoose.Schema.Types.ObjectId, ref: 'Student'
+},
+  assessment: {
+    type: mongoose.Schema.Types.ObjectId, ref: 'Assessment'
+  }
 }
-const Question = mongoose.model("Question", questionSchema);
-*/
+const Grade = mongoose.model("Grade", gradeSchema);
 
-/* Dummy database values 
-const question1 = new Question({
-  id : 1,
-  mark:
-});
-const student1 = new Student({
-  name: "Parsa",
-  assessments:
-});
-*/
 
-app.get("/", function(req, res){
+
+
+/* Home route */
+app.get(async function(req, res){
+try{
+  var posts = await Post.find({});
+} catch(error){
+  res.send(error);
+}
+res.render("home", {
+  startingContent: homeStartingContent,
+  posts: posts
+  });
+
+/*  Using Callback function:
   Post.find({}, function(err, posts){
     res.render("home", {
       startingContent: homeStartingContent,
       posts: posts
       });
   });
+ */ 
+})
+
+app.get("/post/:postid", (req, res) => {
+  const requestedPostId = req.params.postid;
+  
+  Post.findOne({_id: requestedPostId}, function(err, post){
+    res.render("post", {
+      post: post
+      });
+  });
 });
+
+/* TODO: handle editing in the same route as posts/:postid 
+ Hint: show the form only if the user's role is teacher */
+app.get("/editPost/:postid", (req, res) => {
+  const requestedPostId = req.params.postid;
+  
+  Post.findOne({_id: requestedPostId}, function(err, post){
+    res.render("editPost", {
+      post: post
+      });
+  });
+});
+
+app.post("/editPost/:postid", async (req, res) => {
+  const requestedPostId = req.params.postid;
+  const doc = await Post.findOne({ _id: requestedPostId });
+  const update = { content: req.body.postBody, title: req.body.postTitle };
+  await doc.updateOne(update);
+
+  res.redirect("/");
+});
+
+app.post("/delete/:id", (req, res) => {
+  const requestedId = req.params.id;
+  Post.findByIdAndRemove({_id:requestedId} , function(err){
+    if(err){
+      console.log(err);
+    }else{
+      console.log("Successfully deleted the document");
+      res.redirect("/");
+    }
+  })
+});
+
+
 app.get("/professor", (req, res) => {
   res.render("professor", {professorContent: professorContent});
 });
@@ -132,50 +193,55 @@ app.get("/teacherAssessments", (req, res) => {
   }
 });
 
+// TODO: The toLetterGrade function doesn't take into account the weight of the assessment.
+// You should take another parameter, weight, and scale your lettergrade conditions accordingly.
 
+function toLetterGrade(grade) {
+  let LetterGrade = '';
 
-app.get("/studentAssessments", (req, res) => {
-
-  function toLetterGrade(arr) {
-    var LetterGrade = '';
-    var result = [];
-    for (i = 0; i < arr.length; i++) {
-      LetterGrade = '';
-      if (arr[i] >= 85) {
-        LetterGrade = "A";
-      } else if (arr[i] >= 80) {
-        LetterGrade= "A-";
-      } else if (arr[i] >= 75) {
-        LetterGrade = "B+";
-      } else if (arr[i] >= 70) {
-        LetterGrade = "B";
-      } else if (arr[i] >= 65) {
-        LetterGrade = "B-";
-      } else if (arr[i] >= 60) {
-        LetterGrade= "C+";
-      } else if (arr[i] >= 55) {
-        LetterGrade = "C";
-      } else if (arr[i] >= 50) {
-        LetterGrade= "D";
-      } else {
-        LetterGrade = "F";
-      }
-      result.push(LetterGrade);
+    if (grade >= 85) {
+      LetterGrade = "A";
+    } else if (grade >= 80) {
+      LetterGrade= "A-";
+    } else if (grade >= 75) {
+      LetterGrade = "B+";
+    } else if (grade >= 70) {
+      LetterGrade = "B";
+    } else if (grade >= 65) {
+      LetterGrade = "B-";
+    } else if (grade >= 60) {
+      LetterGrade= "C+";
+    } else if (grade >= 55) {
+      LetterGrade = "C";
+    } else if (grade >= 50) {
+      LetterGrade= "D";
+    } else {
+      LetterGrade = "F";
     }
-    return result;
-  }
 
-  Assessment.find({}, function(err, assessments){
-  var lettergrades = [];
-    assessments.forEach(function(assessment, index) {
-      lettergrades.push(toLetterGrade(assessment.grades))
-    })
+  return LetterGrade;
+}
 
-  res.render("studentAssessments", {
-    assessments: assessments,
-    lettergrades: lettergrades
+/************************
+Student's Assessment Page
+*************************/
+
+app.get("/studentAssessments/:id", (req, res) => {
+  let studentID = req.params.id;
+  let lettergrades = [];
+
+  Grade.find({student: studentID}).populate('student').populate('assessment').exec(function(err, grades){
+
+    // compute and populate the lettergrades array
+    grades.forEach(function(grade, index){
+      lettergrades.push(toLetterGrade(grade.mark));
+    });
+
+    res.render("studentAssessments", {
+      grades: grades,
+      lettergrades: lettergrades
+    });
   });
-});
 
 });
 
@@ -183,92 +249,150 @@ app.get("/submitAssessment", (req, res) => {
   res.render("submitAssessment");
 });
 
-app.get("/assessment/:assid", function(req, res){
+/**************************
+Assessment Page for Teacher
+***************************/
 
+app.get("/assessment/:assid", function(req, res){
   const requestedAssId = req.params.assid;
 
   if (req.isAuthenticated()){
 
-  Assessment.findOne({_id: requestedAssId}, function(err, assessment){
-    res.render("assessment", {
-      assessment: assessment
+    Grade.find({assessment: requestedAssId}).populate('student', 'name').populate('assessment').exec(function (err, grades) {
+      if (err) return handleError(err);
+        res.render("assessment", {
+          grades: grades
+          });
       });
+
+  } else {
+    res.redirect("/login");
+}
+  
+});
+
+/********************
+ Assessment edit page
+*********************/
+
+app.get("/editAssessment/:assid", (req, res) => {
+  const requestedAssId = req.params.assid;
+
+  if (req.isAuthenticated()){
+  Grade.find({assessment: requestedAssId}).populate('student', 'name').populate('assessment').exec(function (err, grades) {
+    if (err) return handleError(err);
+    res.render("editAssessment", {
+      grades: grades
+      });
+      
   });
 
 } else {
   res.redirect("/login");
 }
   
-});
-
-app.get("/editAssessment/:assid", (req, res) => {
-  const requestedAssId = req.params.assid;
-
-  if (req.isAuthenticated()){
-    Assessment.findOne({_id: requestedAssId}, function(err, assessment){
-      res.render("editAssessment", {
-        assessment: assessment
-        });
-    });
-  } else {res.redirect("/login");}
   
 });
 
-app.post("/submitAssessment", (req, res) => {
+/**********************
+Submit a new assessment 
+***********************/
+
+app.post("/submitAssessment", async (req, res) => {
   if (req.isAuthenticated()){
 
+    // Create a new assessment schema and save it
     const assessment = new Assessment({
       name: req.body.assname,
       weight: req.body.weight,
-      totalMarks: req.body.totalMarks,
-      grades: req.body.grades.split(" ")
+      totalMarks: req.body.totalMarks
     }); 
-    assessment.save(function(err){
-      if (!err){
-        res.redirect("/assessment/"+assessment._id);
+    try {
+      await assessment.save();
+    } catch(error){
+      res.status(500).send(error);
+    }
+
+    //get all students form the databse and for each student add a new document to the grades model
+    try{
+      var students = await Student.find({});
+      for(i = 0; i<students.length; i++){
+        let grade = await Grade.create({
+          assessment: assessment,
+          student: students[i]
+        });
+      }
+    } catch(error){
+      res.send(error);
+      }
+
+      res.redirect("/assessment/"+assessment._id);
+
+    } else{
+      res.redirect("/login");
+    }
+
+});
+
+
+/**************************************
+Edit an assessment and save the grades
+***************************************/
+
+app.post("/editAssessment/:assid", async (req, res) => {
+  // get all the marks from the from body
+  let marks = [];
+  marks = req.body.allGrades.split(" ");
+
+  // get all student ID's form the databse
+  let studentIDs = [];
+    try{
+      var students = await Student.find({});
+      for(i = 0; i<students.length; i++){
+        studentIDs[i] = students[i]._id;
+      }
+    } catch(error){
+      res.send(error);
+    }
+
+  let length = studentIDs.length;
+  let index = 0;
+  for (index; index<length;index++){
+    // find the grade schema by searching with a studentID and an assessmentID 
+    Grade.findOneAndUpdate(
+      {assessment: req.params.assid, student:studentIDs[index]},
+      {$set:{mark:marks[index]}},
+      {new: true}, 
+      function(err, grade){
+      if (err) {
+        console.log("Something wrong when updating data!");
       }
     });
-  }else {console.log(err);}
+  }
+
+  res.redirect("/assessment/"+req.params.assid);
+
 });
 
-app.post("/editAssessment", (req, res) => {
 
-  Assessment.findByIdAndUpdate(req.body.assid, {
-    name: req.body.assname,
-    weight: req.body.weight,
-    totalMarks: req.body.totalMarks,
-    grades: req.body.grades
-  },
-  {new: true});
-  res.redirect("/assessment/"+req.body.assid);
-});
-/*
-  const assessment = new Assessment({
-    name: req.body.assname,
-    weight: req.body.weight,
-    totalMarks: req.body.totalMarks,
-    grades: req.body.grades
-  });
-    assessment.save(function(err){
+/* Create a new post */
 
-    if (!err){
-      res.redirect("/assessment/"+assessment._id);
-    } else {console.log(err);}
-  });
-});
-  */
-
-app.post("/compose", function(req, res){
-  const post = new Post({
+app.post("/compose", async function(req, res){
+  
+  const post = await Post.create({
     title: req.body.postTitle,
     content: req.body.postBody
   });
-  post.save(function(err){
-    if (!err){
-        res.redirect("/");
-    }
-  });
+  
+  try {
+    await post.save();
+  } catch(error){
+    res.status(500).send(error);
+  }
+  res.redirect("/");
 });
+
+
 
 /* --- User Authentication --- */
 
@@ -336,6 +460,11 @@ app.post("/login", function(req, res){
   });
 
 });
+
+
+
+
+
 
 io.on('connection', socket => {
   console.log('a user connected');

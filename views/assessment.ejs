@@ -2,22 +2,22 @@
 <%- include("partials/header"); -%>
 
 
-<h1><%=assessment.name%></h1>
-<p>Weight: <%=assessment.weight%></p>
-<p>Total Marks: <%=assessment.totalMarks%></p>
+<h1><%=grades[0].assessment.name%></h1>
+<p>Weight: <%=grades[0].assessment.weight%></p>
+<p>Total Marks: <%=grades[0].assessment.totalMarks%></p>
 
-<a href="/editAssessment/<%= assessment._id %>">edit</a>
+<a href="/editAssessment/<%= grades[0].assessment._id %>">edit</a>
 
 <table>
     <tr>
-        <th>StudentID</th>
+        <th>Student Name</th>
         <th>Grade</th>
     </tr>
 
-    <% assessment.grades.forEach(function(grade, index) { %>
+    <% grades.forEach((grade) => { %>
     <tr>
-        <td><%=index+1%></td>
-        <td><%=grade%></td>
+        <td><%= grade.student.name %></td>
+        <td><%= grade.mark %></td>
     </tr>
     <%}) %>
 </table>

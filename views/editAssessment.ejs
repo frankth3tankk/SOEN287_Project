@@ -1,24 +1,43 @@
 <%- include("partials/header"); -%>
 
+<script type="text/javaScript" src="/getallgrades.js"></script>
 
-<h1><%=assessment.name%></h1>
+<h1><%=grades[0].assessment.name%></h1>
+<br><br>
+<button onclick="getallgrades()">☰</button><br>
 
-<form action="/editAssessment" method="post">
-    <label for="assname">Assessment Name:</label><br>
-    <input type="text" id="assname" name="assname" value="<%=assessment.name%>"><br>
-    <label for="totalMarks">Total Marks:</label><br>
-    <input type="text" id="totalMarks" name="totalMarks" value="<%=assessment.totalMarks%>"><br>
-    <label for="weight">Weight:</label><br>
-    <input type="text" id="weight" name="weight" value="<%=assessment.weight%>"><br><br>
-    <input type="text" name="assid" value="<%=assessment._id%>">
-    <h3>Edit Grades</h3>
+<form id="gradestable" action="/editAssessment/<%=grades[0].assessment._id%>" onsubmit="getallgrades()" method="post">
 
-    <% assessment.grades.forEach(function(grade, index) { %>
-        <label>Student ID:</label><p><%=index+1%></p><br>
-        <input type="text" name="grades[]" value="<%=grade%>"><br>
-    <%}) %>
+    <label>Assessment Name:</label><br>
+    <input type="text" name="assname" value="<%=grades[0].assessment.name%>"><br><br>
 
-    <input type="submit" value="Submit">
+    <label>Weight:</label><br>
+    <input type="text" name="weight" value="<%=grades[0].assessment.weight%>"><br><br>
+    
+    <label>Total Marks:</label><br>
+    <input type="text" name="totalMarks" value="<%=grades[0].assessment.totalMarks%>"><br><br>
+
+    <table>
+        <tr>
+            <th>Student Name</th>
+            <th>Grade</th>
+        </tr>
+    
+        <% grades.forEach((grade) => { %>
+        <tr>
+            <td><%= grade.student.name %></td>
+            <td class="grades"><input type="text" name="grades" value="<%=grade.mark%>"><br></td>
+        </tr>
+        <%}) %>
+    </table>
+
+
+    <input type="hidden" id="allGrades" name="allGrades" value=""><br>
+
+    <input type="submit" value="Submit" >
 
 </form>
+
+
+
 <%- include("partials/footer"); -%>
