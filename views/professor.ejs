@@ -1,4 +1,33 @@
 <%- include("partials/header"); -%>
-    <h1>Professor</h1>
-    <p> <%= professorContent %> </p>
+
+
+<% if (user.role == "Teacher") { %>
+
+<form action="/editProfessor/<%=thisprof._id%>" method="post">
+    <label>Full Name</label>
+    <input type="text" name="fullname" value="<%=thisprof.fullname%>">
+    <br>
+    <label>Description</label>
+    <textarea name="description" rows="5" cols="30"><%=thisprof.description%></textarea>
+
+    <button class="" type="submit" name="button">Edit</button>
+</form>
+
+
+<% } else if (user.role == "Student") { %>
+
+    <h1>Professors</h1>
+
+    <% for (let professor of professors) { %>
+
+        <div>
+            <h3><%= professor.fullname %></h3>
+            <p><%= professor.description %></p>
+        </div>
+
+    <% } %>
+
+<% } %>
+
+
 <%- include("partials/footer"); -%>

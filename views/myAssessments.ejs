@@ -13,10 +13,10 @@
 <% grades.forEach(function(grade, index) { %>
   <tr>
 
-  <td class="Assignments"><%= grades[index].assessment.name -%></td>
-  <td class="Grade"><%= grades[index].mark -%></td>
+  <td class="Assignments"><%= grade.assessment.name -%></td>
+  <td class="Grade"> <%= grade.mark -%> / <%= grade.assessment.totalMarks -%></td>
   <td class="LetterGrade"><%= lettergrades[index] -%></td>
-  <td class="Average">10%</td>
+  <td class="Average"><%= classAverage[index] -%></td>
   <td class="Median">9%</td>
 </tr>
 <%}) %>

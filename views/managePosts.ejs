@@ -1,0 +1,39 @@
+<%- include("partials/header"); -%>
+
+
+    <h1>Edit Posts</h1>
+<% posts.forEach(function(post) { %>
+
+    <h3>Edit <%=post.title%></h3>
+
+    <form class="" action="/editPost/<%=post._id%>" method="post">
+      <div class="">
+        <label>Title</label>
+        <input class="" type="text" name="postTitle" value="<%=post.title%>">
+        <br>
+        <label>Post</label>
+        <textarea class="" name="postBody" rows="5" cols="30"><%=post.content%></textarea>
+      </div>
+      <button class="" type="submit" name="button">Edit</button>
+    </form>
+
+    <form action="/deletePost/<%=post._id%>" method="post">
+        <button class="" type="submit" name="button">delete</button>
+    </form> <br>
+
+<%}) %>
+
+
+    <h1>Compose a New Post</h1>
+    <form  class="" action="/newPost" method="post">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" name="postTitle" value="subject">
+        <br>
+        <label>Post</label>
+        <textarea  name="postBody" rows="5" cols="30">lecture content</textarea>
+      </div>
+      <button type="submit" name="button">Publish</button>
+    </form>
+
+<%- include("partials/footer"); -%>

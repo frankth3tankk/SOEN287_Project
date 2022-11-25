@@ -12,20 +12,37 @@
 
 <div id="main">
 <div id="topnav" class = "topnav">
+    
     <button class="openbtn" onclick="sideBarButton()">☰</button>
+
     <a class = "active" href="/">Home</a>
-    <a href = "/assessments">Assessments</a>
-    <a href = "#Help">Help</a>
+
+<% if (user.role == "Teacher") { %>
+    <a href = "/teacherLounge">Teacher Lounge</a>
+<% } else if (user.role == "Student") { %>
+    <a href = "/myAssessments">My Assessments</a>
+<% } %>
+    <a href = "/help">Help</a>
+
     <a id = "profile" href="/login"><img src="/user.png" alt="Profile" width="45" height="45" ></a>
 </div>
 
 
 
 <div id="mySidebar" class="sidebar">
-    <a href="#">Grades</a>
-    <a href="/assessments">Assessments</a>
-    <a href="/compose">Documents</a>
+
+    <% if (user.role == "Teacher") { %>
+        <a href = "/managePosts">Manage Posts</a>
+        <a href = "/manageAssessments">Manage Assessments</a>
+        <a href = "/manageStudents">Manage Students</a>
+
+    <% } else if (user.role == "Student") { %>
+        <a href = "/myAssessments">My Assessments</a>
+    <% } %>
+
     <a href="/professor">Professor</a>
+    <a href = "/help">Help</a>
+
   </div>
 
   <div class="mainComponent">

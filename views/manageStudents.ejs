@@ -1,0 +1,83 @@
+<%- include("partials/header"); -%>
+
+<script type="text/javaScript" src="/addstudents.js"></script>
+
+<h1>All Enrolled Students</h1>
+
+<table>
+
+    <tr>
+        <th>Username</th>
+        <th>StudentID</th>
+        <th>Name</th>
+    </tr>
+
+    <% for (let student of enrolledStudents) { %>
+    <tr>
+        <td><%= student.username %></td>
+        <td><%= student.studentID %></td>
+        <td><%= student.name %></td>
+    </tr>
+    <% } %>
+
+</table>
+<br><hr><br>
+
+
+<h2>Enroll users into this course</h2>
+
+<form id="enrollstudentsform" action="/addstudents" onsubmit="addstudents()" method="post">
+
+    <table>
+
+        <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Register</th>
+        </tr>
+    
+        <% for (let user of basicUsers) { %>
+        <tr>
+            <td><%= user.username %></td>
+            <td><%= user.name %></td>
+            <td><input type="checkbox" name="usersToEnroll" value="<%= user.username %>"></td>
+        </tr>
+        <% } %>
+    
+    </table>
+
+    <input type="submit" value="Register">
+
+</form>
+<br><hr><br>
+
+
+<h2>Remove students from this course</h2>
+
+<form id="removestudentsform" action="/removestudents" onsubmit="removestudents()" method="post">
+
+    <table>
+
+        <tr>
+            <th>Username</th>
+            <th>StudentID</th>
+            <th>Name</th>
+            <th>Remove</th>
+        </tr>
+    
+        <% for (let student of enrolledStudents) { %>
+        <tr>
+            <td><%= student.username %></td>
+            <td><%= student.studentID %></td>
+            <td><%= student.name %></td>
+            <td><input type="checkbox" name="usersToRemove" value="<%= student.username %>"></td>
+        </tr>
+        <% } %>
+    
+    </table>
+
+    <input type="submit" value="Remove">
+
+</form>
+
+<%- include("partials/footer"); -%>
