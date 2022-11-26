@@ -1,0 +1,29 @@
+<%- include("partials/header"); -%>
+
+<body>
+    <form id="thisone">    
+        <div> <label> <h1  style="background-color: grey; padding-left: 00.5cm; margin-top: 0px;">User Information</h1></label>
+    
+         <pre><h3>
+    
+    Name: <%= user.name %>
+    Username: <%= user.username %>
+    Password: 
+    Role: <%= user.role %>
+   
+        </h3></pre>
+        </div>
+        
+        <div>
+        <label> <h1  style="background-color: grey; padding-left: 0.5cm; padding-right: 0.5cm;">Contact Information </h1></label>
+        <pre><h3>
+    Home Address:
+    Cellular Phone:
+    E-mail:
+    Emergency Contact:  
+         </h3> </pre>
+         </div>
+    </form>
+</body>
+
+<%- include("partials/footer"); -%>

@@ -8,7 +8,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
-const { forEach } = require('lodash');
+const { forEach, find } = require('lodash');
 
 
 const homeStartingContent = "Dear Students, Welcome to this edition of SOEN287 - Web Programming.\n My name is Abdelghani and I will be facilitating this course this Fall 2022. \n This is an introduction course on Web programming. The course will include discussions and explanations of the following topics: \nInternet architecture and protocols; Web applications through clients and servers; markup languages; client-side programming using scripting languages; static website contents and dynamic page generation through server-side programming; preserving state in Web applications. \nRegards, \nAbdelghani Benharref.";
@@ -16,6 +16,7 @@ const professorContent = "Scelerisque eleifend donec pretium vulputate sapien. R
 
 const app = express();
 
+//const PORT = process.env.PORT || 3030;
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
@@ -118,6 +119,30 @@ if (req.isAuthenticated()) {
 } else {
 res.redirect("/login");
 }
+
+});
+
+// =========== User Route ===========
+app.get("/user/:userid", async (req, res) => {
+  const requestedUserId = req.params.userid;
+  
+  if (req.isAuthenticated() && req.user.role == "Student") {
+    let student = await Student.findOne({username: requestedUserId});
+    res.render("user", {
+      student: student,
+      user: req.user
+    });
+
+  } else if (req.isAuthenticated() && req.user.role == "Teacher"){
+    let prof = await Professor.findOne({username: requestedUserId});
+    res.render("user", {
+      prof: prof,
+      user: req.user
+    });
+
+  } else {
+    res.redirect("/login");
+    }
 
 });
 
@@ -627,7 +652,6 @@ app.post("/register", async (req, res) => {
 
     // TODO: authenticate teacher registration
     if (Boolean(req.body.isteacher)){
-      // Add Teacher role to this user
       await newuser.updateOne({role: "Teacher"});
 
       // Create a new professor document and save it
