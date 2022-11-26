@@ -457,15 +457,13 @@ app.post("/editAssessment/:assid", async (req, res) => {
     await grade.updateOne({mark: marks.shift()});
   }
 
-  // update the assessment info
-  await Assessment.findOneAndUpdate(
-    {assessment: req.params.assid},
-    {$set: {
-      name: req.body.assname,
-      totalMarks: req.body.totalMarks,
-      weight: req.body.weight,
-    }}
-  );
+    // find and update the assessment info
+  let assessment = await Assessment.findById(req.params.assid);
+  await assessment.updateOne({
+    name: req.body.assname,
+    totalMarks: req.body.totalMarks,
+    weight: req.body.weight,
+  });
 
   res.redirect("/assessment/"+req.params.assid);
 
@@ -493,42 +491,6 @@ app.get("/manageStudents", async (req, res) => {
   res.redirect("/login");
 }
 
-
-/*
-
-  let enrolled = [];
-  let notEnrolled = [];
-  // Separate and store the usernames of all users (that are not teachers)
-
-  try{
-    let studentUsers = await User.find({role: {$ne: "Student" , $ne: "Teacher"}});
-    let length = studentUsers.length;
-
-    for (let index=0; index<length; index++){
-      let exists = await Student.exists({username:studentUsers[index].username});
-
-      if(exists){
-        enrolled.push(studentUsers[index].username);
-      } else {
-        notEnrolled.push(studentUsers[index].username);
-      }
-    }
-  } catch(error){
-    res.send(error);
-  }
-
-
-  if (req.isAuthenticated() && req.user.role === "Teacher") {
-
-      res.render("manageStudents", {
-        enrolled: enrolled,
-        notEnrolled: notEnrolled,
-        user: req.user
-      });
-  } else {
-    res.redirect("/login");
-  }
-*/
 });
 
 
