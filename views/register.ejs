@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <head> <link rel='stylesheet' href='design.css'> </head>
+  <head> <link rel='stylesheet' href='/css/design.css'> </head>
     <title> Sign Up Page </title>
 <style>
-
 </style>
 <body>
  
 
-<form action="/actionPage.php" style="border:1px solid #ccc">
+<form action="/register" method="post" style="border:1px solid #ccc">
   <div class="container1">
     <h1>SOEN 287 Sign Up</h1>
     <p>Please fill in this form to create an account.</p>
@@ -18,30 +17,33 @@
     <input type="text" placeholder="Enter your name" name="name" required>
 
     <label for="Username"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="Username" required>
+    <input type="text" placeholder="Enter Username" name="username" required>
 
     <label for="password"><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="password" required>
 
     <label for="password-repeat"><b>Repeat Password</b></label>
     <input type="password" placeholder="Repeat Password" name="password-repeat" required>
-    </form>
-
-    <form>
 
     <span>Are you a Teacher? </span>
 
-    <select id = "codeWord" onchange = "ShowHideDiv()">
+    <select name="isteacher" id="codeWord" onchange="ShowHideDiv()">
         <option value="N">No</option>
         <option value="Y">Yes</option>            
     </select>
 
+    <div id="cdWord" style="display: none">
+      Enter your Secret Code below:
+      <input type="text" name="secretcode" id="txtCodeWord">
+    </div>
+
+
+    </form>
+
+
 <br> </br>
 
-  <div id="cdWord" style="display: none">
-    Enter your Unique Code below:
-    <input type="text" id="txtCodeWord" />
-  </div>
+
   <hr />
   </form>
 

@@ -140,6 +140,11 @@ app.get("/user/:userid", async (req, res) => {
       user: req.user
     });
 
+  } else if (req.isAuthenticated()){
+    res.render("user", {
+      user: req.user
+    });
+    
   } else {
     res.redirect("/login");
     }
@@ -645,13 +650,19 @@ app.get('/logout', function(req, res, next) {
 app.post("/register", async (req, res) => {
 
   try{
+    // redirect back to register if secret code is not correct
+    if (req.body.isteacher == "Y" && req.body.secretcode != "soen287"){
+      res.redirect("/register");
+    }
+
     // Create a new user using the username
     let newuser = await User.register({username: req.body.username}, req.body.password);
     await newuser.updateOne({name: req.body.name});
 
 
-    // TODO: authenticate teacher registration
-    if (Boolean(req.body.isteacher)){
+    // Authenticate teacher registration
+    // TODO: Hide the actual secret code
+    if (req.body.isteacher == "Y" && req.body.secretcode == "soen287"){
       await newuser.updateOne({role: "Teacher"});
 
       // Create a new professor document and save it
@@ -661,7 +672,8 @@ app.post("/register", async (req, res) => {
         description: " "
       });
       await newprof.save();
-    } else {
+
+    }  else {
       await newuser.updateOne({role: "Basic"});
     }
     
