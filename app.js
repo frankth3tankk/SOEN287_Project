@@ -12,7 +12,6 @@ const { forEach, find } = require('lodash');
 
 
 const homeStartingContent = "Dear Students, Welcome to this edition of SOEN287 - Web Programming.\n My name is Abdelghani and I will be facilitating this course this Fall 2022. \n This is an introduction course on Web programming. The course will include discussions and explanations of the following topics: \nInternet architecture and protocols; Web applications through clients and servers; markup languages; client-side programming using scripting languages; static website contents and dynamic page generation through server-side programming; preserving state in Web applications. \nRegards, \nAbdelghani Benharref.";
-const professorContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const app = express();
 
@@ -82,6 +81,7 @@ const Student = mongoose.model("Student", studentSchema);
 // =============== Professor Schema =============== 
 const profSchema = new mongoose.Schema ({
   fullname: String,
+  title: String,
   description: String,
   username: String
 })
@@ -92,7 +92,7 @@ const gradeSchema = {
   mark: Number,
   student: {
     type: mongoose.Schema.Types.ObjectId, ref: 'Student'
-},
+  },
   assessment: {
     type: mongoose.Schema.Types.ObjectId, ref: 'Assessment'
   }
@@ -194,7 +194,7 @@ app.post("/editProfessor/:profid", async (req, res) => {
 
     let prof = await Professor.findById(req.params.profid);
     await prof.updateOne({
-      fullname: req.body.fullname,
+      title: req.body.tile,
       description: req.body.description
     });
 
@@ -255,7 +255,7 @@ app.get("/managePosts", async (req, res) => {
 
 
 /*********************************
- edit, delete and submit a post 
+ Edit, delete and submit a post 
  *********************************/
 
 app.post("/editPost/:postid", async (req, res) => {
@@ -505,13 +505,12 @@ app.post("/editAssessment/:assid", async (req, res) => {
 ************************/
 
 app.get("/manageStudents", async (req, res) => {
-
+  // find all enrolled students
   let enrolledStudnets = await Student.find({});
-
+  // find all basic users (students who are not enrolled)
   let basicUsers = await User.find({role: "Basic"});
 
   if (req.isAuthenticated() && req.user.role === "Teacher") {
-
     res.render("manageStudents", {
       enrolledStudents: enrolledStudnets,
       basicUsers: basicUsers,
@@ -520,7 +519,6 @@ app.get("/manageStudents", async (req, res) => {
 } else {
   res.redirect("/login");
 }
-
 });
 
 
@@ -618,9 +616,9 @@ app.post("/removestudents", async (req, res) => {
 
 
 
-/*******************
- User Authentication
-********************/
+/***********************
+ User Authentication Pages
+************************/
 
 
 app.get("/register", (req, res) => {
@@ -629,7 +627,7 @@ app.get("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   if (!req.isAuthenticated()){
-    res.render("login");
+    res.render("login", {message: " "});
   } else {
     res.redirect("/");
   }
@@ -645,14 +643,16 @@ app.get('/logout', function(req, res, next) {
 });
 
 
-/* --- User Registreation --- */
+/*******************
+ User Registration
+********************/
 
 app.post("/register", async (req, res) => {
 
   try{
-    // redirect back to register if secret code is not correct
+    // Throw an error if the secret code is not correct
     if (req.body.isteacher == "Y" && req.body.secretcode != "soen287"){
-      res.redirect("/register");
+    throw "Teacher Secret Code is not correct!"
     }
 
     // Create a new user using the username
@@ -663,6 +663,7 @@ app.post("/register", async (req, res) => {
     // Authenticate teacher registration
     // TODO: Hide the actual secret code
     if (req.body.isteacher == "Y" && req.body.secretcode == "soen287"){
+      //Set user role to Teacher
       await newuser.updateOne({role: "Teacher"});
 
       // Create a new professor document and save it
@@ -674,11 +675,12 @@ app.post("/register", async (req, res) => {
       await newprof.save();
 
     }  else {
+      //Set user role to Basic if it's not a teacher registeratoin
       await newuser.updateOne({role: "Basic"});
     }
     
     // Authenticate user (set a cookie) and render the homepage
-    passport.authenticate("local")(req, res, function(){
+    passport.authenticate("local")(req, res, () => {
       res.redirect("/");
     });
 
@@ -699,6 +701,42 @@ app.post("/login", function(req, res){
     password: req.body.password
   });
 
+  passport.authenticate("local",
+  (err, user, options) => {
+    if (user) {
+      // If the user exists log him in:
+      req.login(user, (error)=>{
+        if (error) {
+          res.send(error);
+        } else {
+          console.log("Successfully authenticated");
+          res.redirect("/");
+        };
+      });
+    } else {
+      console.log(options.message); // Prints the reason of the failure
+      res.render("login", { message: "Username or password incorrect" })
+    };
+})(req, res)
+
+  /*
+  passport.authenticate('local', function(err, user, info) {
+    if (err) {
+      return res.send(err); 
+    }
+    // -- reflecting authentication failure
+    if (! user) {
+      res.render("login", {error: "username or password incorrect"});
+    }
+    req.login(user, loginErr => {
+      if (loginErr) {
+        return next(loginErr);
+      }
+      return res.redirect("/");
+    });      
+  })(req, res, next);
+  */
+/*
   req.login(user, function(err){
     if (err) {
       console.log(err);
@@ -708,7 +746,7 @@ app.post("/login", function(req, res){
       });
     }
   });
-
+*/
 });
 
 

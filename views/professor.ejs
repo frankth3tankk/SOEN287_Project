@@ -4,10 +4,10 @@
 <% if (user.role == "Teacher") { %>
 
 <form action="/editProfessor/<%=thisprof._id%>" method="post">
-    <label>Full Name</label>
-    <input type="text" name="fullname" value="<%=thisprof.fullname%>">
+    <label>Your Title</label>
+    <input type="text" name="title" value="<%=thisprof.fullname%>">
     <br>
-    <label>Description</label>
+    <label>Your Description</label>
     <textarea name="description" rows="5" cols="30"><%=thisprof.description%></textarea>
 
     <button class="" type="submit" name="button">Edit</button>
@@ -22,6 +22,7 @@
 
         <div>
             <h3><%= professor.fullname %></h3>
+            <h2><%= professor.tile %></h2>
             <p><%= professor.description %></p>
         </div>
 
