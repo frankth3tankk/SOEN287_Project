@@ -713,40 +713,12 @@ app.post("/login", function(req, res){
           res.redirect("/");
         };
       });
-    } else {
+    } else { // If the username and password don't match
       console.log(options.message); // Prints the reason of the failure
       res.render("login", { message: "Username or password incorrect" })
     };
 })(req, res)
 
-  /*
-  passport.authenticate('local', function(err, user, info) {
-    if (err) {
-      return res.send(err); 
-    }
-    // -- reflecting authentication failure
-    if (! user) {
-      res.render("login", {error: "username or password incorrect"});
-    }
-    req.login(user, loginErr => {
-      if (loginErr) {
-        return next(loginErr);
-      }
-      return res.redirect("/");
-    });      
-  })(req, res, next);
-  */
-/*
-  req.login(user, function(err){
-    if (err) {
-      console.log(err);
-    } else {
-      passport.authenticate("local")(req, res, function(){
-        res.redirect("/");
-      });
-    }
-  });
-*/
 });
 
 

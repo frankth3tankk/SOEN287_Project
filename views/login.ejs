@@ -6,7 +6,16 @@
 
   </head>    
    <body>    
-   <center> <h1> SOEN 287 Login Portal </h1> </center>     
+   <center> <h1> SOEN 287 Login Portal </h1> </center>    
+
+
+    <% if (message > " ") { %>
+      <p> Error:
+    <%= message %>
+      </p>
+    <% } %>
+
+   
    <form action="/login" method="POST">  
         <div class= "container0">   
             <label> Username: </label>   
