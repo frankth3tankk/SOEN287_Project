@@ -1,34 +1,40 @@
-<%- include("partials/header"); -%>
-
-
-<% if (user.role == "Teacher") { %>
+<%- include("partials/header"); -%> <% if (user.role == "Teacher") { %>
 
 <form action="/editProfessor/<%=thisprof._id%>" method="post">
-    <label>Your Title</label>
-    <input type="text" name="title" value="<%=thisprof.fullname%>">
-    <br>
-    <label>Your Description</label>
-    <textarea name="description" rows="5" cols="30"><%=thisprof.description%></textarea>
+  <div class="container2">
+    <label class="">Your Title</label>
+    <br />
+    <input
+      type="text"
+      name="title"
+      value="<%=thisprof.fullname%>"
+      class="inputBox"
+    />
+    <br />
+    <br />
+    <label class="">Your Description</label>
+    <br />
+    <textarea name="description" rows="5" cols="30">
 
-    <button class="" type="submit" name="button">Edit</button>
+<%=thisprof.description%></textarea
+    ><br />
+  </div>
+  <div class="submitAssessment">
+    <button class="submitAssessment" type="submit" name="button">Edit</button>
+  </div>
 </form>
-
 
 <% } else if (user.role == "Student") { %>
 
-    <h1>Professors</h1>
+<h1 style="text-align: center">Professors</h1>
 
-    <% for (let professor of professors) { %>
+<% for (let professor of professors) { %>
 
-        <div>
-            <h3><%= professor.fullname %></h3>
-            <h2><%= professor.tile %></h2>
-            <p><%= professor.description %></p>
-        </div>
+<div class="container3">
+  <h3><%= professor.fullname %></h3>
+  <h2><%= professor.tile %></h2>
+  <p style="font-size: 14px"><%= professor.description %></p>
+  <br />
+</div>
 
-    <% } %>
-
-<% } %>
-
-
-<%- include("partials/footer"); -%>
+<% } %> <% } %> <%- include("partials/footer"); -%>

@@ -10,12 +10,11 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const { forEach, find } = require('lodash');
 
-
 const homeStartingContent = "Dear Students, Welcome to this edition of SOEN287 - Web Programming.\n My name is Abdelghani and I will be facilitating this course this Fall 2022. \n This is an introduction course on Web programming. The course will include discussions and explanations of the following topics: \nInternet architecture and protocols; Web applications through clients and servers; markup languages; client-side programming using scripting languages; static website contents and dynamic page generation through server-side programming; preserving state in Web applications. \nRegards, \nAbdelghani Benharref.";
 
 const app = express();
 
-//const PORT = process.env.PORT || 3030;
+const PORT = process.env.PORT || 3030;
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
@@ -45,6 +44,8 @@ const userSchema = new mongoose.Schema ({
   password: String,
   name: String,
   role: String,
+  address: String,
+  phone: String
 });
 userSchema.plugin(passportLocalMongoose);
 const User = new mongoose.model("User", userSchema);
@@ -99,7 +100,12 @@ const gradeSchema = {
 }
 const Grade = mongoose.model("Grade", gradeSchema);
 
-
+// =============== Announcement Schema =============== 
+const announcementSchema = new mongoose.Schema ({
+  title: String,
+  content: String
+})
+const Announcement = mongoose.model("Announcement", announcementSchema);
 
 
 
@@ -108,12 +114,14 @@ const Grade = mongoose.model("Grade", gradeSchema);
 app.get("/", async (req, res) => {
 
 let posts = await Post.find({});
+let announcements = await Announcement.find({});
 
 if (req.isAuthenticated()) {
 
   res.render("home", {
     startingContent: homeStartingContent,
     posts: posts,
+    announcements: announcements,
     user: req.user
     });
 } else {
@@ -142,6 +150,35 @@ app.get("/user/:userid", async (req, res) => {
 
   } else if (req.isAuthenticated()){
     res.render("user", {
+      user: req.user
+    });
+    
+  } else {
+    res.redirect("/login");
+    }
+
+});
+
+// =========== User Edit Page ===========
+app.get("/edituser/:userid", async (req, res) => {
+  const requestedUserId = req.params.userid;
+  
+  if (req.isAuthenticated() && req.user.role == "Student") {
+    let student = await Student.findOne({username: requestedUserId});
+    res.render("editUser", {
+      student: student,
+      user: req.user
+    });
+
+  } else if (req.isAuthenticated() && req.user.role == "Teacher"){
+    let prof = await Professor.findOne({username: requestedUserId});
+    res.render("editUser", {
+      prof: prof,
+      user: req.user
+    });
+
+  } else if (req.isAuthenticated()){
+    res.render("editUser", {
       user: req.user
     });
     
@@ -254,6 +291,47 @@ app.get("/managePosts", async (req, res) => {
 });
 
 
+/*************************************
+ Edit, delete and submit an Announcement 
+ *************************************/
+
+app.post("/announce", async function(req, res){
+  
+  const post = await Announcement.create({
+    title: req.body.subject,
+    content: req.body.content
+  });
+  
+  try {
+    await post.save();
+  } catch(error){
+    res.status(500).send(error);
+  }
+  res.redirect("/");
+});
+
+app.post("/editAnnouncement/:id", async (req, res) => {
+  const requestedPostId = req.params.id;
+  const doc = await Announcement.findOne({ _id: requestedPostId });
+  const update = { content: req.body.content, title: req.body.subject };
+  await doc.updateOne(update);
+
+  res.redirect("/");
+});
+
+app.post("/deleteAnnouncement/:id", (req, res) => {
+  const requestedId = req.params.id;
+  Announcement.findByIdAndRemove({_id:requestedId} , function(err){
+    if(err){
+      console.log(err);
+    }else{
+      res.redirect("/");
+    }
+  })
+});
+
+
+
 /*********************************
  Edit, delete and submit a post 
  *********************************/
@@ -304,6 +382,13 @@ app.get("/myAssessments", async (req, res) => {
   let lettergrades = [];
   let classAverage = [];
   let classGrades
+  let medians = [];
+  let stddev = [];
+  let overall = {
+    marks: 0,
+    total: 0,
+    letterGrade: ''
+  };
 
 
   // If the logged in user is a student
@@ -320,18 +405,32 @@ app.get("/myAssessments", async (req, res) => {
   // for each assessment of this student
   for(let grade of grades){
     // compute and populate the lettergrades array
-    lettergrades.push(toLetterGrade(grade.mark));
+    lettergrades.push(toLetterGrade(grade.mark, grade.assessment.totalMarks));
 
     // find the class average
     classGrades = await Grade.find({assessment: grade.assessment});
     classAverage.push(getAverage(classGrades));
+
+    //find the median
+    medians.push(getMedian(classGrades.map(grade => grade.mark)));
+
+    //find the standard deviation
+    stddev.push(getStandardDeviation(classGrades.map(grade => grade.mark)));
+
+    //add to overall grade
+    overall.marks += grade.mark/grade.assessment.totalMarks * grade.assessment.weight;
+    overall.total += grade.assessment.weight;
   }
+  overall.letterGrade = toLetterGrade(overall.marks, overall.total);
 
   res.render("myAssessments", {
     grades: grades,
     user: req.user,
     lettergrades: lettergrades,
-    classAverage: classAverage
+    classAverage: classAverage,
+    medians: medians,
+    stddev: stddev,
+    overall: overall
   });
 
 });
@@ -342,16 +441,28 @@ app.get("/myAssessments", async (req, res) => {
 Teacher assessment page
 ***********************/
 
-app.get("/manageAssessments", (req, res) => {
+app.get("/manageAssessments", async (req, res) => {
 
   if (req.isAuthenticated() && req.user.role === "Teacher"){
     
-    Assessment.find({}, (err, assessments) => {
+
+
+    let assessments = await Assessment.find({});
+    let averages = [];
+    
+    for (let assessment of assessments) {
+      let grades = await Grade.find({assessment: assessment});
+      averages.push(getAverage(grades))
+    }
+    
+
+
       res.render("manageAssessments", {
         assessments: assessments,
+        averages: averages,
         user: req.user
       });
-    });
+
 
 
   } else {
@@ -662,7 +773,7 @@ app.post("/register", async (req, res) => {
 
     // Authenticate teacher registration
     // TODO: Hide the actual secret code
-    if (req.body.isteacher == "Y" && req.body.secretcode == "soen287"){
+    if (req.body.isteacher == "Y" && req.body.secretcode == process.env.SECRET){
       //Set user role to Teacher
       await newuser.updateOne({role: "Teacher"});
 
@@ -740,11 +851,29 @@ function getAverage(grades){
   return avg;
 }
 
+function getMedian(grades){
+    grades.sort();
+    if(grades.length == 0) return 0;
+    //--EVEN number of elements
+    if(grades.length % 2 === 0){
+      return (grades[grades.length/2 - 1] + grades[grades.length/2])/2;
+    }
+    //--ODD number of elements
+    return grades[(grades.length+1)/2 - 1]
+}
+
+function getStandardDeviation (array) {
+  const n = array.length
+  const mean = array.reduce((a, b) => a + b) / n
+  return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+}
+
 // TODO: The toLetterGrade function doesn't take into account the weight of the assessment.
 // You should take another parameter, weight, and scale your lettergrade conditions accordingly.
 
-function toLetterGrade(grade) {
+function toLetterGrade(grade, weight) {
   let LetterGrade = '';
+  grade = grade/weight * 100;
 
     if (grade >= 85) {
       LetterGrade = "A";
@@ -771,6 +900,6 @@ function toLetterGrade(grade) {
 
 
 
-app.listen(3000, function() {
+app.listen(PORT, function() {
   console.log("Server started on port 3000");
 });

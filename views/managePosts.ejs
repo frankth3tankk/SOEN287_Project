@@ -1,39 +1,57 @@
 <%- include("partials/header"); -%>
 
-
-    <h1>Edit Posts</h1>
+<h1 style="text-align: center">Edit Posts</h1>
 <% posts.forEach(function(post) { %>
+<div class="">
+  <h3 style="text-align: center">Edit <%=post.title%></h3>
 
-    <h3>Edit <%=post.title%></h3>
+  <form class="container3" action="/editPost/<%=post._id%>" method="post">
+    <div class="container2">
+      <label>Title</label>
+      <input
+        class="inputBox"
+        type="text"
+        name="postTitle"
+        value="<%=post.title%>"
+      />
+      <br />
+      <label>Post</label>
+      <br />
+      <textarea class="" name="postBody" rows="5" cols="30">
+<%=post.content%></textarea
+      >
+    </div>
+    <div class="submitAssessment">
+      <button class="submitAssessment" type="submit" name="button">Edit</button>
+    </div>
+  </form>
 
-    <form class="" action="/editPost/<%=post._id%>" method="post">
-      <div class="">
-        <label>Title</label>
-        <input class="" type="text" name="postTitle" value="<%=post.title%>">
-        <br>
-        <label>Post</label>
-        <textarea class="" name="postBody" rows="5" cols="30"><%=post.content%></textarea>
-      </div>
-      <button class="" type="submit" name="button">Edit</button>
-    </form>
-
-    <form action="/deletePost/<%=post._id%>" method="post">
-        <button class="" type="submit" name="button">delete</button>
-    </form> <br>
-
+  <form action="/deletePost/<%=post._id%>" method="post">
+    <div class="submitAssessment">
+      <button class="submitAssessment" type="submit" name="button">
+        Delete
+      </button>
+    </div>
+  </form>
+  <br />
+</div>
 <%}) %>
 
-
-    <h1>Compose a New Post</h1>
-    <form  class="" action="/newPost" method="post">
-      <div class="form-group">
-        <label>Title</label>
-        <input type="text" name="postTitle" value="subject">
-        <br>
-        <label>Post</label>
-        <textarea  name="postBody" rows="5" cols="30">lecture content</textarea>
-      </div>
-      <button type="submit" name="button">Publish</button>
-    </form>
+<h1 style="text-align: center">Compose a New Post</h1>
+<form class="container3" action="/newPost" method="post">
+  <div class="container2">
+    <label>Title</label>
+    <input type="text" name="postTitle" value="subject" class="inputBox" />
+    <br />
+    <label>Post</label>
+    <br />
+    <textarea name="postBody" rows="5" cols="30">lecture content</textarea>
+  </div>
+  <div class="submitAssessment">
+    <button type="submit" name="button" class="submitAssessment">
+      Publish
+    </button>
+  </div>
+</form>
 
 <%- include("partials/footer"); -%>

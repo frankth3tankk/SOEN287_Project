@@ -5,21 +5,20 @@
         <div> <label> <h1 class="userh">User Information</h1></label>
     
          <pre><h3>
-    Name: 
+    Name: <%= user.name %>
     Username: <%= user.username %>
-    Password: 
-    Role: 
+    Role: <%= user.role %>
         </h3></pre>
         </div>
         
         <div> <label> <h1 class="userh">Contact Information</h1></label>
         <pre><h3 style="padding-right: 0.5cm;">
-    Home Address:      <input type="text" class="useri"> </input>
-    Cellular Phone:    <input type="text" class="useri"> </input>
-    E-mail:            <input type="text" class="useri"> </input>
-    Emergency Contact: <input type="text" class="useri"> </input>
+    Name:              <input type="text" class="useri" value="<%= user.name %>"> </input>
+    E-mail:            <input type="text" class="useri" value="<%= user.username %>"> </input>
+    Home Address:      <input type="text" class="useri" value="<%= user.address %>"> </input>
+    Cellular Phone:    <input type="text" class="useri" value="<%= user.phone %>"> </input>
                             
-                        <button type="submit">Submit</button>
+            <button type="submit">Submit</button>
          </h3> </pre>
          </div>
     </form>

@@ -8,7 +8,6 @@
     
     Name: <%= user.name %>
     Username: <%= user.username %>
-    Password: 
     Role: <%= user.role %>
    
         </h3></pre>
@@ -17,13 +16,15 @@
         <div>
         <label> <h1  style="background-color: grey; padding-left: 0.5cm; padding-right: 0.5cm;">Contact Information </h1></label>
         <pre><h3>
-    Home Address:
-    Cellular Phone:
-    E-mail:
-    Emergency Contact:  
+    Home Address: <%= user.address %>
+    Cellular Phone: <%= user.phone %>
+    Email: <%= user.username %>
          </h3> </pre>
          </div>
     </form>
+
+    <div class="custombutton"><a href="/editUser/<%=user._id%>" target="_blank">Edit my profile</a></div>
+
 </body>
 
 <%- include("partials/footer"); -%>

@@ -1,27 +1,70 @@
 <%- include("partials/header"); -%>
 
+
+<h2>Summary</h2>
+
 <table class="AssignmentTable">
   <thead>
   <tr>
     <td class="Headers" >Assignments</td>
+    <td class="Headers" >Weight</td>
     <td class="Headers" >Marks</td>
     <td class="Headers" >Letter Grade</td>
     <td class="Headers" >Average</td>
     <td class="Headers" >Median</td>   
+    <td class="Headers" >Standard Deviation</td>   
   </tr>
 </thead>
 <% grades.forEach(function(grade, index) { %>
   <tr>
 
-  <td class="Assignments"><%= grade.assessment.name -%></td>
-  <td class="Grade"> <%= grade.mark -%> / <%= grade.assessment.totalMarks -%></td>
-  <td class="LetterGrade"><%= lettergrades[index] -%></td>
-  <td class="Average"><%= classAverage[index] -%></td>
-  <td class="Median">9%</td>
+  <td class="CenteredText Assignments"><%= grade.assessment.name -%></td>
+  <td class="CenteredText Assignments"><%= grade.assessment.weight -%></td>
+  <td class="CenteredText Grade"> <%= grade.mark -%> / <%= grade.assessment.totalMarks -%></td>
+  <td class="CenteredText LetterGrade"><%= lettergrades[index] -%></td>
+  <td class="CenteredText Average"><%= classAverage[index] -%></td>
+  <td class="CenteredText Median"><%= medians[index] -%></td>
+  <td class="CenteredText Stddev"><%= stddev[index] -%></td>
 </tr>
 <%}) %>
+<tr>
+  <td class="OverallGrade CenteredText">Overall Final</td>
+  <td></td>
+  <td class="OverallGrade CenteredText"> <%= overall.marks -%> / <%= overall.total -%></td>
+  <td class="OverallGrade CenteredText"><%= overall.letterGrade -%></td>
+</tr>
 </table>
+<h2>Graphical Analysis</h2>
+<div id="chart"></div>
 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['bar']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = [<%- grades.map(
+      (grade, index) => "[" + ['"'+grade.assessment.name+'"', classAverage[index], grades[index].mark] + "]"
+    )-%>];
+    var data = google.visualization.arrayToDataTable([
+      ['Assessment', 'Class Average', 'Yours'],
+      ...data
+    ]);
+
+    var options = {
+      bars: 'vertical',
+      axes: {
+            y: {
+              0: { label: 'Score'} // Top x-axis.
+            }
+          },
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('chart'));
+
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+  }
+</script>
 
 
 <%- include("partials/footer"); -%>

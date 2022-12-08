@@ -1,21 +1,46 @@
 <%- include("partials/header"); -%>
 
-
-<h2>Create your Assessment</h2>
+<h1>
+  <style>
+    h1 {
+      padding: 10px;
+    }
+  </style>
+  Create your Assessment
+</h1>
 
 <form action="/submitAssessment" method="post">
+  <div>
+    <style>
+      span {
+        display: block;
+        overflow: hidden;
+        padding: 0px 4px 0px 6px;
+      }
+    </style>
+    <label class="labelName2" for="assname">Assessment Name:</label
+    ><span>
+      <input class="inputBox2" type="text" id="assname" name="assname" value=""
+    /></span>
 
-    <label for="assname">Assessment Name:</label><br>
-    <input type="text" id="assname" name="assname" value=""><br>
+    <label class="labelName2" for="totalMarks">Total Marks:</label>
+    <span>
+      <input
+        class="inputBox2"
+        type="text"
+        id="totalMarks"
+        name="totalMarks"
+        value=""
+    /></span>
 
-    <label for="totalMarks">Total Marks:</label><br>
-    <input type="text" id="totalMarks" name="totalMarks" value=""><br>
-
-    <label for="weight">Weight:</label><br>
-    <input type="text" id="weight" name="weight" value=""><br>
-
-    <input type="submit" value="Submit">
-
-  </form> 
+    <label class="labelName2" for="weight">Weight:</label
+    ><span>
+      <input class="inputBox2" type="text" id="weight" name="weight" value=""
+    /></span>
+  </div>
+  <div>
+    <input class="submit2" type="submit" value="Submit" />
+  </div>
+</form>
 
 <%- include("partials/footer"); -%>

@@ -139,39 +139,154 @@
   border-collapse: collapse;
   background-color:#EEF1FF;
   border:3px;
-  width:700px;
-  height:300px;
+  border-radius: 5px;
+  width: 760px;
   box-shadow: 0px 10px 30px 5px black;
   margin: 25px auto;
+}
+td {
+  height: 50px;
 }
 .AssignmentTable tbody tr td{
   color: 182747;
 }
 .AssignmentTable thead tr{
-  background-color: #FFF8EA;
+  background-color: #0f0e0e;
+  color: #cccccc;
 }
-td{
+tbody tr:nth-child(2n) {
+  background-color: #dddcdc;
+}
+tbody tr:hover {
+  background-color: #6ea2b5;
+}
+html {
   font-family: 'Open Sans',sans-serif;
 }
-.Assignments{
+.CenteredText{
 text-align: center;
 }
-.LetterGrade{
-  text-align: center;
-  }
-.LetterMark{
-    text-align: center;
-    }
-  .Average{
-    text-align: center;
-    }
-    .Median{
-      text-align: center;
-    }
 #Final{
   text-align: center;
   font-weight: bold;
 }
+
+
+/* Teacher's style */
+.editAssessment{
+  margin: 64%;
+}
+.editAssign{
+  border-collapse: collapse;
+  background-color:#EEF1FF;
+  border:3px;
+  border-radius: 5px;
+  width: 400px;
+  box-shadow: 0px 10px 30px 5px black;
+  margin: 25px auto;
+}
+.inputBox{
+  display: block;
+  width: 200px;
+  padding: 8px 16px;
+  line-height: 25px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 6px;
+  margin: auto;
+}
+.gradeBox{
+  width: auto;
+  padding: 5px 10px;
+  line-height: 25px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 6px;
+  margin: 5px auto;
+  text-align: center;
+}
+.labelName{
+  padding: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center; 
+}
+.submitAssessment{
+  padding: 10px;
+  text-align: center;
+}
+.inputBox2{
+  display: block;
+  width: 200px;
+  padding: 8px 16px;
+  line-height: 25px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 6px;
+  float: inline-start;
+  margin: 5px;
+}
+.labelName2{
+  padding: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center; 
+  float: left;
+}
+.submit2{
+  padding: 10px;
+  text-align: center;
+  margin: 10px;
+}
+
+.button{
+  padding:1em;
+  text-align: center;
+  display:inline-block;
+  text-decoration: none !important;
+  margin:0 auto;
+  
+}
+.container{
+  width: auto;
+  text-align: center;
+  
+}
+a:hover {
+  background-color: #555;
+}
+.container2{
+  width: auto;
+  text-align: center;
+  margin: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  
+}
+textarea {
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+}
+.container3{
+  
+  text-align: center;
+  margin-left: 30%;
+  margin-right: 30%;
+  font-size: 18px;
+  font-weight: bold;
+  border-style: solid;
+  border-color: #0f0e0e;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+
 
 /* Chatbox */
 .chatbox{
@@ -238,7 +353,17 @@ text-align: center;
   transition: 0.2s ease;
 }
 
-
+.OverallGrade{
+  font-weight: bold;
+}
+#chart{
+  width: 760px;
+  height: 400px;
+  box-shadow: 0px 10px 30px 5px black;
+  margin: 25px auto;
+  padding: 20px;
+  background-color: white;
+}
 
 
 
@@ -257,3 +382,27 @@ text-align: center;
     bottom: 0;
     flex-shrink: 0;
   }
+h2 {
+  text-align: center;
+  padding-top: 11px;
+}
+
+
+.custombutton {
+  padding-left: 20px;
+}
+
+.custombutton a:link, .custombutton a:visited {
+  background-color: white;
+  color: black;
+  border: 2px solid green;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.custombutton a:hover, .custombutton a:active {
+  background-color: green;
+  color: white;
+}

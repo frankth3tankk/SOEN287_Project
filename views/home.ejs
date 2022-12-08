@@ -15,14 +15,27 @@
 
         <div class="announcements">
             <h2 style="order: 1">Announcements</h2>
+            <% if (user.role == "Teacher") { %>
             <div>
-                <h3>Welcome to SOEN287</h3>
-                <p>don't forget to study</p>
+                <h3>Compose a new announcement</h3>
+                <div>
+                <form action="/announce" method="post">
+                      <input type="text" name="subject" value="Subject">
+                      <br>
+                      <textarea  name="content" >Announcement</textarea> <br>
+                    <button type="submit" name="button">Publish</button>
+                  </form>
+                </div>
             </div>
-            <div>
-                <h3>New announcement</h3>
-                <p>the latest announcement is on top</p>
-            </div>
+            <% } %>
+
+            <% for (let announcement of announcements) { %>
+                <div>
+                    <h3><%= announcement.title %></h3>
+                    <p><%= announcement.content %></p>
+                </div>
+            <% } %>
+
         </div>
 
 </div>
