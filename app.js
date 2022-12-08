@@ -900,6 +900,6 @@ function toLetterGrade(grade, weight) {
 
 
 
-app.listen(PORT, function() {
+app.listen(3000, function() {
   console.log("Server started on port 3000");
 });
